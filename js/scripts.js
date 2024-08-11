@@ -41,6 +41,8 @@ async function fetchWeather(){
 function displayWeather(data){
     const city = data.name;
     const temp = data.main.temp;
+    const temp_c = ((temp-32) * (5/9)).toFixed(1);
+    const feels_like = Math.round(data.main.feels_like);
     const weatherDescription = data.weather[0].description;
     const icon = data.weather[0].icon;
     console.log(temp, weatherDescription, icon);
@@ -49,9 +51,9 @@ function displayWeather(data){
     weatherIcon.src = `https://openweathermap.org/img/w/${icon}.png`;
 
     document.getElementById("weather-icon").appendChild(weatherIcon);
-    document.getElementById("weather-temp").textContent = temp + "\u00B0";
+    document.getElementById("weather-temp").textContent = `${temp}\u00B0F (~${temp_c}\u00B0C) - Feels like ${feels_like}\u00B0F`;
     document.getElementById("weather-description").textContent = weatherDescription;
-    document.getElementById("city-name").textContent = `${city} :`;
+    document.getElementById("city-name").textContent = `${city}`;
 }
 
 fetchWeather();

@@ -22,3 +22,36 @@ carouselButton.addEventListener('click', function(){
         carousel.cycle();
     }
 });
+
+async function fetchWeather(){
+    const apiKey = process.env.OPEN_WEATHER_API_KEY;
+    let city = "Kihei";
+    let url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`;
+
+    try{
+        const response = await fetch(url);
+        const data = await response.json();
+        console.log(data);
+        displayWeather(data);
+    }catch(e){
+        console.error('There was an error:',e);
+    }
+};
+
+function displayWeather(data){
+    const city = data.name;
+    const temp = data.main.temp;
+    const weatherDescription = data.weather[0].description;
+    const icon = data.weather[0].icon;
+    console.log(temp, weatherDescription, icon);
+
+    const weatherIcon = document.createElement("img");
+    weatherIcon.src = `https://openweathermap.org/img/w/${icon}.png`;
+
+    document.getElementById("weather-icon").appendChild(weatherIcon);
+    document.getElementById("weather-temp").textContent = temp + "\u00B0";
+    document.getElementById("weather-description").textContent = weatherDescription;
+    document.getElementById("city-name").textContent = `${city} :`;
+}
+
+fetchWeather();
